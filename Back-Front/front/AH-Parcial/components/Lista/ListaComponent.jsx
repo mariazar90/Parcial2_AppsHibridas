@@ -7,9 +7,9 @@ function ListaComponent({listado, ruta, entidad}){
    const [lista, setLista] = useState(listado)
 
     const onChangeFiltro = (event) => {
-        const filtro = event.target.value.toLowerCase()
-        const listaDieta = actividad.filter(item => item.name.toLowerCase().includes(filtro))
-        setDietas(listaDieta)
+      const filtro = event.target.value.toLowerCase()
+        const listaDieta = listado.filter(item => item.name.toLowerCase().includes(filtro))
+        setLista(listaDieta)
     }
 
     useEffect(() => {
