@@ -1,0 +1,51 @@
+.diet-page{
+    margin: 1.5rem auto;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(64, 130, 192, 0.851);
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(56, 56, 56, 0.237);
+    font-size: 1.6rem;
+    text-align: left;
+}
+
+.diet-page__title{
+    color: rgb(5, 70, 145);
+}
+
+.diet-page__calories{
+    margin: 1rem;
+}
+
+.diet-page__calories span{
+    font-weight: bold;
+    color: rgb(3, 160, 97);
+}
+
+.diet-page__description{
+    margin: 1rem;
+}
+
+.diet-page__description span{
+    font-weight: bold;
+    color: rgb(3, 160, 97);
+}
+
+.diet-page__button{
+    width: 150px;
+    height: 50px;
+    background-color: rgba(93, 133, 174, 0.925);
+    border-radius: 15px;
+    border: none;
+}
+
+.diet-page__button a{
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+}

@@ -1,0 +1,27 @@
+.home-page {
+    padding:40px;
+}
+
+.home-section {
+    margin-top: 20px;
+}
+
+.home-section__h1 {
+    color: #054691;
+}
+
+.home-section__p {
+    margin-bottom: 20px;
+}
+
+.home-section__button__container :first-child{
+    margin-right: 12px;
+}
+
+.home-section__button {
+    background-color: #5CCAAF;
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
+}

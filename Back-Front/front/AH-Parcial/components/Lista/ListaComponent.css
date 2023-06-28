@@ -1,0 +1,22 @@
+.list{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.list__form{
+    margin: auto;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.list__filter{
+    margin: 0.5rem;
+    padding: 1rem;
+    flex: 0.5;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+}

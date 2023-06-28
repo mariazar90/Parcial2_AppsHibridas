@@ -1,0 +1,27 @@
+.exercise-page{
+    margin: 1.5rem auto;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(64, 130, 192, 0.851);
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(56, 56, 56, 0.237);
+    font-size: 1.6rem;
+    text-align: left;
+}
+
+.exercise-page__title{
+    color: rgb(5, 70, 145);
+}
+
+.exercise-page__description{
+    margin: 1rem;
+}
+
+.exercise-page__description span{
+    font-weight: bold;
+    color: rgb(3, 160, 97);
+}

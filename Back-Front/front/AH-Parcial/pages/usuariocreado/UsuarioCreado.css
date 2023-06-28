@@ -1,0 +1,19 @@
+.usuario-creado-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .usuario-creado-container h1 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .usuario-creado-container p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .usuario-creado-container a {
+    color: #007bff;
+  }
+  

@@ -1,0 +1,32 @@
+.list-item{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 1.5rem;
+    max-width: 80%;
+}
+
+.list-item__detail{
+    justify-content: center;
+    padding: 0.5rem;
+    margin: auto;
+}
+
+.list-item__name{
+    color: rgb(5, 70, 145);
+    font-size: 2rem;
+    margin: auto;
+}
+
+.list-item__button{
+    padding: 0.5rem;
+    display: inline-block;
+    background-color: rgba(63, 193, 160, 0.848);
+    border-radius: 10px;
+}
+
+.list-item__full{
+    text-decoration: none;
+    color: white;
+}
