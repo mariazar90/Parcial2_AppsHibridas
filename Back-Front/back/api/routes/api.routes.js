@@ -5,7 +5,7 @@ import * as routinesController from '../controllers/routines.api.controllers.js'
 import * as accountControllers from '../controllers/account.api.controllers.js';
 import { validateAccount, validateProfile, validateUpdateProfile } from '../../middlewares/account.validate.middleware.js';
 import { validateRoutine } from '../../middlewares/routines.validate.middleware.js';
-import { tokenVerify } from '../../middlewares/token.validate.middleware.js';
+import { tokenVerify, roleVerify } from '../../middlewares/token.validate.middleware.js';
 import { validateDiet } from '../../middlewares/diet.validate.middleware.js';
 import { validateExercises } from '../../middlewares/exercises.validate.middleware.js';
 
@@ -23,16 +23,16 @@ route.patch('/profile', [tokenVerify, validateUpdateProfile], accountControllers
 route.use('/diet', tokenVerify);
 route.get('/diet', dietController.getDiet)
 route.get('/diet/:idDiet', dietController.getDietbyId)
-route.put('/diet/:idDiet', [validateDiet], dietController.editDiet);
-route.post('/diet', [validateDiet], dietController.createDiet)
-route.delete('/diet/:idDiet', dietController.deleteDiet);
+route.put('/diet/:idDiet', [roleVerify, validateDiet], dietController.editDiet);
+route.post('/diet', [roleVerify, validateDiet], dietController.createDiet)
+route.delete('/diet/:idDiet', [roleVerify], dietController.deleteDiet);
 
 route.use('/exercises', tokenVerify);
 route.get('/exercises', exercisesController.getExercises)
 route.get('/exercises/:idExercise', exercisesController.getExercisebyId)
-route.put('/exercises/:idExercise', [validateExercises], exercisesController.editExercise);
-route.post('/exercises', [validateExercises], exercisesController.createExercise)
-route.delete('/exercises/:idExercise', exercisesController.deleteExercise);
+route.put('/exercises/:idExercise', [roleVerify, validateExercises], exercisesController.editExercise);
+route.post('/exercises', [roleVerify, validateExercises], exercisesController.createExercise)
+route.delete('/exercises/:idExercise', [roleVerify], exercisesController.deleteExercise);
 
 route.use('/routines', tokenVerify);
 route.get('/routines', routinesController.getRoutines);
