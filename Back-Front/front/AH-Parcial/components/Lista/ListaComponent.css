@@ -1,12 +1,17 @@
-.list{
-    width: 70%;
+.list_container{
     display: flex;
+    padding:0 80px;
     flex-direction: column;
     margin: auto;
 }
+.list_container ul{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .list__form{
-    margin: auto;
+    margin: 0;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
@@ -19,4 +24,24 @@
     flex: 0.5;
     font-size: 1.2rem;
     border-radius: 1rem;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header a{
+    min-width: 120px;
+    text-align: center;
+    margin-left: 10px;
+    padding:  0.5rem 1rem;
+    display: inline-block;
+    background-color: rgba(63, 193, 160, 0.848);
+    border-radius: 10px;
+    color:white;
+    text-decoration: none;
+}
+.header a:hover{
+    background-color: rgba(63, 193, 160, 1);
 }

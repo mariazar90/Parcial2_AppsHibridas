@@ -2,9 +2,12 @@ import {Router} from 'express'
 import * as dietController from '../controllers/dieta.api.controllers.js'
 import * as exercisesController from '../controllers/exercises.api.controllers.js'
 import * as routinesController from '../controllers/routines.api.controllers.js';
-import { validateAccount } from '../../middlewares/account.validate.middleware.js';
 import * as accountControllers from '../controllers/account.api.controllers.js';
+import { validateAccount, validateProfile, validateUpdateProfile } from '../../middlewares/account.validate.middleware.js';
+import { validateRoutine } from '../../middlewares/routines.validate.middleware.js';
 import { tokenVerify } from '../../middlewares/token.validate.middleware.js';
+import { validateDiet } from '../../middlewares/diet.validate.middleware.js';
+import { validateExercises } from '../../middlewares/exercises.validate.middleware.js';
 
 const route = Router()
 
@@ -13,22 +16,29 @@ route.post('/account', [validateAccount], accountControllers.createAccount);
 route.patch('/account', [tokenVerify], accountControllers.updateUser);
 route.post('/session', [validateAccount], accountControllers.login);
 route.delete('/session', [tokenVerify], accountControllers.logout);
+route.post('/profile', [tokenVerify, validateProfile], accountControllers.createProfile);
+route.get('/profile', [tokenVerify], accountControllers.getProfile);
+route.patch('/profile', [tokenVerify, validateUpdateProfile], accountControllers.updateProfile);
 
 route.use('/diet', tokenVerify);
 route.get('/diet', dietController.getDiet)
-
 route.get('/diet/:idDiet', dietController.getDietbyId)
+route.put('/diet/:idDiet', [validateDiet], dietController.editDiet);
+route.post('/diet', [validateDiet], dietController.createDiet)
+route.delete('/diet/:idDiet', dietController.deleteDiet);
 
 route.use('/exercises', tokenVerify);
 route.get('/exercises', exercisesController.getExercises)
-
 route.get('/exercises/:idExercise', exercisesController.getExercisebyId)
+route.put('/exercises/:idExercise', [validateExercises], exercisesController.editExercise);
+route.post('/exercises', [validateExercises], exercisesController.createExercise)
+route.delete('/exercises/:idExercise', exercisesController.deleteExercise);
 
 route.use('/routines', tokenVerify);
 route.get('/routines', routinesController.getRoutines);
 route.get('/routines/:idRoutine', routinesController.getRoutineById);
-route.post('/routines', routinesController.createRoutines);
-route.put('/routines/:idRoutine', routinesController.replaceRoutines);
+route.post('/routines', [validateRoutine], routinesController.createRoutines);
+route.put('/routines/:idRoutine', [validateRoutine], routinesController.replaceRoutines);
 route.delete('/routines/:idRoutine', routinesController.deleteRoutines);
 
 export default route

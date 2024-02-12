@@ -1,26 +1,27 @@
 import ListaComponent from "../../components/Lista/ListaComponent";
+import {deleteDiet, getAllDiets} from "../../services/diet/dieta.services.js"
+
 import { useEffect, useState } from "react" 
 
 function DietListPage(){
-    const [dietas, setDietas] = useState([])
+  const [dietas, setDietas] = useState([])
+
+    const handleDelete = (id) => {
+      
+      deleteDiet(id).then(() => {
+          getAllDiets().then(data => {
+            setListado({...listado, lista:data})
+          })
+      });
+    }
 
     useEffect(() => {
-      fetch('http://localhost:2023/api/diet',{
-        headers: {
-          'auth-token': localStorage.getItem('token')
-        }
-    })
-      .then(response => response.json())
-      .then(data => {
+      getAllDiets().then(data => {
         setDietas(data)
       })
     }, [])
   
-    useEffect(() =>{
-     
-    }, [dietas])
-  
- return <ListaComponent listado={dietas} ruta="diet" entidad="dieta"/>
+ return <ListaComponent listado={dietas} ruta="diet"  entidad="dieta" deleteFunction={(id)=>handleDelete(id)}/>
 }
 
 export default DietListPage

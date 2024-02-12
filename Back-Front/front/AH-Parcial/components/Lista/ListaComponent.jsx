@@ -2,9 +2,11 @@ import ItemComponent from "./Item/ItemComponent"
 import PropTypes from 'prop-types'
 import './ListaComponent.css'
 import { useEffect, useState } from "react"
+import { Container } from "@mui/material"
 
-function ListaComponent({listado, ruta, entidad}){
-   const [lista, setLista] = useState(listado)
+function ListaComponent({listado, ruta, entidad, deleteFunction}){
+
+    const [lista, setLista] = useState(listado)
 
     const onChangeFiltro = (event) => {
       const filtro = event.target.value.toLowerCase()
@@ -17,20 +19,18 @@ function ListaComponent({listado, ruta, entidad}){
     }, [listado])
 
    return (
-    <div className="list">
+    <div className="list_container">
+      <div className="header">
         <form className="list__form">
-            Filtrar por: <input className="list__filter" type="text" onChange={onChangeFiltro}></input>
+              Filtrar por: <input className="list__filter" type="text" onChange={onChangeFiltro}></input>
         </form>
-    <ul>
-        {lista.map(item => <ItemComponent key={item._id} item={item} ruta={ruta} entidad={entidad}></ItemComponent>)}
-    </ul>
+        <a href={`/${ruta}/new`}>Crear {entidad}</a>
+      </div>
+      <ul>
+          {lista.map(item => <ItemComponent key={item._id} item={item} ruta={ruta} deleteFunction={deleteFunction}></ItemComponent>)}
+      </ul>
     </div>
    )
-}
-
-ListaComponent.prototype = {
-  listado: PropTypes.array.isRequired,
-  ruta: PropTypes.array.isRequired
 }
 
 export default ListaComponent

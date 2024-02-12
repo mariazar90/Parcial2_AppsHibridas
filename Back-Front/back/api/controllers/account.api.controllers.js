@@ -1,5 +1,7 @@
 import * as services from "../../services/account.services.js";
 import * as tokenServices from "../../services/session.services.js";
+import * as profileServices from "../../services/profile.services.js";
+import {secret, secretRestore} from "../../config.js";
 
 async function getAccount(req, res){
     const token = req.headers['auth-token']
@@ -22,10 +24,58 @@ async function createAccount(req, res){
         })
 }
 
+async function createProfile(req, res) {
+    return profileServices.createProfile(req.account, req.body)
+        .then(()=> {
+            res.status(201).json({ message: "Perfil creado correctamente."})
+        })
+        .catch((err) => {
+            res.status(400).json({ error: { message: err.message }})
+        })
+}
+
+async function getProfile(req, res) {
+    return profileServices.getProfile(req.account._id)
+        .then((profile)=> {
+            res.status(200).json(profile)
+        })
+        .catch((err) => {
+            res.status(400).json({ error: { message: err.message }})
+        })
+}
+
+async function updateProfile(req, res){
+    return profileServices.updateProfile(req.account, req.body)
+
+        .then((profile)=> {
+            res.status(200).json(profile)
+        })
+        .catch((err) => {
+            res.status(400).json({ error: { message: err.message }})
+        })
+    
+}
+
 async function login(req, res){
     return services.login(req.body)
         .then(async (account) => {
-            return { token: await tokenServices.createToken(account), account }
+            return { token: await tokenServices.createToken(account, secret), account }
+        })
+        .then((auth) => {
+            res.status(200).json(auth)
+        })
+        .catch((err) => {
+            res.status(400).json({ error: { message: err.message }})
+        })
+}
+
+async function restore(req, res){
+    return services.restoreAccount(req.body)
+        .then(async (account) => {
+
+            const token = await tokenServices.createToken(account, secretRestore);
+            const verificationLink = `http://localhost:2023/new-password/${token}`;
+            //enviar email
         })
         .then((auth) => {
             res.status(200).json(auth)
@@ -61,10 +111,29 @@ async function updateUser(req, res){
         })
 }
 
+async function createPassword(req, res){
+    const token = req.headers['auth-token']
+    const usuario = req.body
+    
+    services.restorePassword(token, usuario)
+        .then(function (usuario) {
+            if (usuario) {
+                res.status(200).json(usuario)
+            } else {
+                res.status(404).json({error: {message: `No se encontró ningún usuario con el id ${id}.`}})
+            }
+        })
+}
+
 export {
     getAccount,
+    restore,
     createAccount,
+    createProfile,
+    getProfile,
+    updateProfile,
     login,
     logout,
-    updateUser
+    updateUser,
+    createPassword
 }

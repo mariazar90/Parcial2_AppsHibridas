@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { updateUser } from "../../services/account/account.services"
+import { updateProfile } from "../../services/profile/profile.services.js"
 import { getDietById } from "../../services/diet/dieta.services"
+import { useSession } from '../../context/session.context';
 import './DietPage.css'
 
 function DietPage(){
+  const { updateProfileContext } = useSession();
     const [diet, setDiet] = useState ({})
+    const [role, setRole] = useState ('ADMIN')
     const {idDiet} = useParams()
     const navigate = useNavigate();
     const agregarDieta = () => {
-      updateUser({diet: diet._id})
+      updateProfile({diet: diet._id})
       .then(user => {
+        updateProfileContext(newProfile)
         navigate('/', {replace:true});
       })
     }
@@ -26,11 +30,16 @@ function DietPage(){
 
     return (
         <div className='diet-page'>
-            <img className="dieta-list-item__img" src={`https://picsum.photos/200/200?random=${diet._id}`} />
+          <div className='diet-page__header'>
+            <img className="dieta-page__img" src={`https://picsum.photos/200/200?random=${diet._id}`} />
             <h1 className="diet-page__title">{diet.name}</h1>
-            <p className="diet-page__calories"><span>Calorías:</span> {diet.calories}</p>
-            <p className="diet-page__description"><span>Descripción:</span> {diet.description}</p>
+          </div>
+          <p className="diet-page__calories"><span>Calorías:</span> {diet.calories}</p>
+          <p className="diet-page__description"><span>Descripción:</span> {diet.description}</p>
+          <div className='diet-page__action'>
             <button className="diet-page__button" onClick={agregarDieta}><a href="/">Agregar dieta</a></button>
+            {role == 'ADMIN' && <button className="diet-page__button"><a href={`/diet/new?diet=${diet._id}`}>Editar</a></button>}
+          </div>
         </div>
     )
 }

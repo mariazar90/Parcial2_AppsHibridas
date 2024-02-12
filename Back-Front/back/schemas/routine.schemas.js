@@ -1,21 +1,17 @@
 import yup from 'yup';
+import * as exercisesScheme from './exercises.schemas.js'
 
-const routineScheme = yup.object({
-    description: yup.string().required,
-    routine: yup.array().of(
-        yup.object().shape({
-            days: yup.array().of(yup.string()).required(),
-            exercises: yup.array().of(
-                yup.object().shape({
-                    _id: yup.string().required(),
-                    name: yup.string().required(),
-                    description: yup.string().required()
-                })
-            )
-        })
-    )
+const itemRoutine = yup.object({
+    days: yup.array().of(yup.string()),
+    exercises: yup.array().of(exercisesScheme.exercises)
+})
+
+const routine = yup.object({
+    description: yup.string().required(),
+    name: yup.string(),
+    routine: yup.array().of(itemRoutine)
 })
 
 export {
-    routineScheme
+    routine
 }

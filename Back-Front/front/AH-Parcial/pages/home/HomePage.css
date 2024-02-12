@@ -3,25 +3,40 @@
 }
 
 .home-section {
-    margin-top: 20px;
+    margin: 40px 30px;
 }
-
+.home-section >h2 {
+    margin-bottom:20px;
+}
 .home-section__h1 {
-    color: #054691;
+    color: rgb(5, 70, 145);
 }
 
 .home-section__p {
     margin-bottom: 20px;
+    font-style: italic;
+    width: 50%;
+    font-size: 20px;
+    text-align: center;
 }
+.home-section__button__container{
+    display:flex;
+    flex-direction: row;
+    justify-content:center ;
+    width: 50%;
 
-.home-section__button__container :first-child{
-    margin-right: 12px;
 }
 
 .home-section__button {
+    text-align: center;
+    width: 180px;
     background-color: #5CCAAF;
     padding: 12px;
     text-decoration: none;
     color: white;
     border-radius: 8px;
+}
+
+.home-section__button:hover{
+    background-color: rgba(63, 193, 160, 1);
 }

@@ -11,6 +11,29 @@ function validateAccount(req, res, next){
         });
 }
 
+function validateProfile(req, res, next){
+    return accountSchemas.profile.validate(req.body, { abortEarly: false, stripUnknown: true })
+        .then((profile) => {
+            res.body = profile;
+            next();
+        })
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
+}
+function validateUpdateProfile(req, res, next){
+    console.log("req.body:", req.body);
+    return accountSchemas.updateProfile.validate(req.body, { abortEarly: false, stripUnknown: true })
+        .then((profile) => {
+            res.body = profile;
+            next();
+        })
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
+}
 export {
-    validateAccount
+    validateAccount,
+    validateUpdateProfile,
+    validateProfile
 }

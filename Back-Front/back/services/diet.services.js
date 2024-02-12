@@ -13,7 +13,27 @@ async function getDietbyId(id){
   return db.collection("Dietas").findOne({_id: new ObjectId(id)})
   }
   
+async function editDiet(dietId, diet){
+  await client.connect()
+  await db.collection("Dietas").updateOne({ _id: new ObjectId(dietId) }, {$set: diet});
+  return diet
+}
+
+async function createDiet(diet){
+  await client.connect()
+  await db.collection("Dietas").insertOne(diet);
+  return diet;
+}
+async function deleteDiet(diet){
+  await client.connect()
+  await db.collection("Dietas").deleteOne({ _id: new ObjectId(diet)})
+  return diet;
+}
+  
 export{
     getDiet,
     getDietbyId,
+    editDiet,
+    createDiet,
+    deleteDiet
 }

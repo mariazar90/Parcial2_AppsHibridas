@@ -1,0 +1,19 @@
+.profile-page__name{
+    margin:auto;
+    color: rgb(5, 70, 145);
+}
+
+.profile-page__header{
+    display:flex;
+}
+
+.profile-page__email span,
+.profile-page__username span,
+.profile-page__routine span{
+    font-weight: bold;
+    color: rgb(3, 160, 97);
+}
+
+.profile-page__body{
+    margin:50px 30px;
+}

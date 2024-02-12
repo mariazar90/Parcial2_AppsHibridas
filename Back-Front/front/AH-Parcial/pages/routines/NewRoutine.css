@@ -1,0 +1,39 @@
+.new-routine {
+    padding:40px;
+}
+
+.new-routine-section {
+    margin-top: 20px;
+}
+
+.new-routine-section__h1 {
+    color: #054691;
+}
+
+.new-routine-form {
+
+    margin-bottom: 20px;
+}
+.new-routine-form-bloque{   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:30px;
+}
+#routine-days, #routine-exercise{
+    width: 250px;
+}
+
+
+.home-section__button__container :first-child{
+    margin-right: 12px;
+}
+
+.home-section__button {
+    background-color: #5CCAAF;
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
+}

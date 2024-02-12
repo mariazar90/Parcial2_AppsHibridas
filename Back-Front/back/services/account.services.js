@@ -1,13 +1,19 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import {secret, secretRestore} from "../config.js";
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 const db = client.db("APLICACIONESHIBRIDAS");
 
+async function getHash(password){
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+}
+
 async function getAccount(token){
     await client.connect();
-    const payload = jwt.verify(token, "CLAVE SECRETA");
+    const payload = jwt.verify(token, secret);
     const account = await db.collection('accounts').findOne({_id: new ObjectId(payload._id)});
     return {...account, password: null}
 }
@@ -18,9 +24,8 @@ async function createAccount(account){
     const accountExist = await db.collection('accounts').findOne({userName: account.userName});
     if(accountExist) throw new Error('La cuenta ya existe, intente con otro nombre de usuario');
     
-    const newAccount = { ...account };
-    const salt = await bcrypt.genSalt(10);
-    newAccount.password = await bcrypt.hash(account.password, salt);
+    const newAccount = { ...account, role: 'user' };
+    newAccount.password = await getHash(account.password);
 
     await db.collection('accounts').insertOne(newAccount);
 }
@@ -37,18 +42,37 @@ async function login(account){
     return { ...accountExist, password: undefined };
 }
 
-async function updateUser(token, usuario){
+async function restoreAccount(account){
     await client.connect();
-    const payload = jwt.verify(token, "CLAVE SECRETA");
+
+    const accountExist = await db.collection('accounts').findOne({userName: account.userName });
+    if(!accountExist) throw new Error('La cuenta no existe!');
+
+    return { ...accountExist, password: undefined };
+}
+
+async function updateUser(token, usuario, secretVerify = secret){
+    await client.connect();
+    const payload = jwt.verify(token, secretVerify);
 
     await db.collection('accounts').updateOne({_id: new ObjectId(payload._id)}, {$set: usuario});
 
     return usuario
 }
 
+async function changePassword(token, usuario){
+    const newAccount = { ...usuario };
+    newAccount.password = await getHash(usuario.password);
+
+    await updateUser(token, newAccount, secretRestore)
+    return { ...newAccount, password: undefined };
+}
+
 export {
     createAccount,
     getAccount,
     login,
-    updateUser
+    updateUser,
+    restoreAccount,
+    changePassword
 }

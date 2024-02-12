@@ -2,15 +2,22 @@
     margin: 1.5rem auto;
     display: flex;
     flex-direction: column;
-    width: 600px;
-    justify-content: center;
-    align-items: center;
+    width: 50%;
     border: 1px solid rgba(64, 130, 192, 0.851);
-    padding: 1rem;
+    padding: 2rem;
     border-radius: 6px;
     box-shadow: 0 0 10px rgba(56, 56, 56, 0.237);
     font-size: 1.6rem;
     text-align: left;
+}
+.exercise-page__header{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.exercise-page__img{
+    padding-right: 20px;
+    padding-bottom: 20px;
 }
 
 .exercise-page__title{
@@ -24,4 +31,24 @@
 .exercise-page__description span{
     font-weight: bold;
     color: rgb(3, 160, 97);
+}
+.exercise-page__button{
+    width: 150px;
+    height: 50px;
+    margin:  auto;
+    background-color: rgba(63, 193, 160, 0.848);
+    border-radius: 15px;
+    border: none;
+}
+.exercise-page__button > a{
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+
+}
+.exercise-page__button:hover{
+
+    background-color: rgba(63, 193, 160, 1);
+    cursor:pointer;
 }

@@ -26,14 +26,16 @@ async function editRoutine(idRoutine, routine){
 // }
 
 async function createRoutine(routine){
+    const newRoutine = {...routine, user_id: new ObjectId(routine.user_id)}
     await client.connect()
-    await db.collection("Rutinas").insertOne(routine);
+    await db.collection("Rutinas").insertOne(newRoutine);
     return routine;
 }
 
 async function deleteRoutine(idRoutine){
     await client.connect()
     await db.collection("Rutinas").deleteOne({ _id: new ObjectId(idRoutine)})
+    return idRoutine;
 }
 
 export {

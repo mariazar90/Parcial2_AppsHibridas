@@ -5,56 +5,14 @@ margin: 0;
 padding: 0;
 box-sizing: border-box;
 }
-
+a{
+  text-decoration: none;
+  color:black;
+}
 :root{
   font-size: 20px;
 }
 
 body{
   font-family: 'Source Sans 3', sans-serif;
-}
-
-.header-list{
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 5%;
-  background-color: rgba(93, 133, 174, 0.925);
-}
-
-.header-list h1{
-  font-size: 0;
-  background-image: url('./assets/logo.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 70px;
-  height: 70px;
-}
-
-.nav-list{
-  align-items: center;
-  justify-content: space-around;
-}
-
-.nav-list ul{
-  display: flex;
-  list-style-type: none;
-}
-
-.nav-list_item li{
-  display: inline-block;
-  padding: 0px 1rem;
-
-}
-
-.nav-list_item a{
-  text-decoration: none;
-  font-family: 'Source Sans 3', sans-serif;
-  font-weight: 700;
-  font-size: 1.6rem;
-  color: white;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  margin:0;
 }
