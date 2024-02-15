@@ -2,7 +2,8 @@ import yup from 'yup';
 
 const account = yup.object({
     userName: yup.string().trim().required().min(3),
-    password: yup.string().required().min(3)//.matches('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
+    password: yup.string().required().min(3),//.matches('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
+    email: yup.string().trim().email(),
 })
 
 const profile = yup.object({

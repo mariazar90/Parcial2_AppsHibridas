@@ -24,10 +24,11 @@ async function createAccount(account){
     const accountExist = await db.collection('accounts').findOne({userName: account.userName});
     if(accountExist) throw new Error('La cuenta ya existe, intente con otro nombre de usuario');
     
-    const newAccount = { ...account, role: 'user' };
+    const newAccount = { userName:account.userName, password: account.password, role: 'user' };
     newAccount.password = await getHash(account.password);
 
-    await db.collection('accounts').insertOne(newAccount);
+    const {insertedId} = await db.collection('accounts').insertOne(newAccount);
+    return {_id:insertedId, userName:account.userName, password: null}
 }
 
 async function login(account){

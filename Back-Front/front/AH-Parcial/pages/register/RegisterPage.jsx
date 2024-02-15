@@ -1,34 +1,43 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+
 import * as accountServices from '../../services/account/account.services.js';
+import * as profileServices from '../../services/profile/profile.services.js';
 import './RegisterPage.css';
-import UsuarioCreado from '../../pages/usuariocreado/usuariocreado.jsx'
+import UsuarioCreado from '../../pages/usuariocreado/UsuarioCreado.jsx'
+
+const steps = [
+    'Create account',
+    'Create profile',
+    'Confirm account'
+  ];
 
 function RegisterPage(){
     const navigate = useNavigate();
-    const [userName, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const [verificationPassword, setVerificationPassword] = useState('');
+    const [activeStep, setActiveStep] = useState(0)
+    const [account, setAccount] = useState({
+        userName: '',
+        email: '',
+        password: '',
+        verificationPassword: ''
+    })
     const [error, setError] = useState('');
 
-    const changeUserName = (event) => {
-        setUserName(event.target.value)
+    const changeAccount = (event) => {
+        setAccount({
+            ...account,
+            [event.target.name]: event.target.value
+        })
     }
-    const changePassword = (event) => {
-        setPassword(event.target.value)
-    }
-    const changeVerificationPassword = (event) => {
-        setVerificationPassword(event.target.value)
-    }
-    const onSubmit = async (event) => {
+    const onSubmitAccount = async (event) => {
         event.preventDefault();
-        if(password != verificationPassword) 
+        if(account.password != account.verificationPassword) 
         setError('Las contraseñas no coinciden')
         else {
-            accountServices.register(userName, password)
+            accountServices.register(account)
             .then(data =>{
                 setError('')
-                console.log("Usuario creado", data);
+                setActiveStep(1)
                 navigate('/usuariocreado');
                 /* navigate('/login', {replace:true}); */
             })
@@ -41,27 +50,34 @@ function RegisterPage(){
 
     return (
         <div className="login-page">
-            <h1>Register</h1>
-            <form className="login-form" onSubmit={onSubmit}>
-                <h2  className="login-form__title">Iniciar Sesión</h2>
-                <label  className="login-form__field">
-                    Nombre de usuario:
-                    <input type="text" value={userName} onChange={changeUserName}/>
-                </label>
-                <label  className="login-form__field">
-                    Contraseña:
-                    <input type="password" value={password} onChange={changePassword}/>
-                </label>
-                <label  className="login-form__field">
-                    Repita la Contraseña:
-                    <input type="password" value={verificationPassword} onChange={changeVerificationPassword}/>
-                </label>
-                <p className="login-form__error">{error}</p>
-                <button type="submit"  className="login-form__submit">Crear</button>
-                <p>
-                    <a href="/Login">Ya tengo cuenta</a>
-                </p>
-            </form>
+                <h1>Register</h1>
+                
+                <form className="login-form" onSubmit={onSubmitAccount}>
+                    <h2  className="login-form__title">Crear cuenta</h2>
+                    <label  className="login-form__field">
+                        Nombre de usuario:
+                        <input name='userName' type="text" value={account.userName} onChange={changeAccount}/>
+                    </label>
+
+                    <label  className="login-form__field">
+                        Email:
+                        <input name='email' type="email" value={account.email} onChange={changeAccount}/>
+                    </label>
+                    <label  className="login-form__field">
+                        Contraseña:
+                        <input name='password' type="password" value={account.password} onChange={changeAccount}/>
+                    </label>
+                    <label  className="login-form__field">
+                        Repita la Contraseña:
+                        <input name='verificationPassword' type="password" value={account.verificationPassword} onChange={changeAccount}/>
+                    </label>
+                    <p className="login-form__error">{error}</p>
+                    <button type="submit"  className="login-form__submit">Crear cuenta</button>
+                    <p>
+                        <a href="/Login">Ya tengo cuenta</a>
+                    </p>
+                </form>
+            
         </div>
     )
 }

@@ -7,7 +7,7 @@ const client = new MongoClient("mongodb://127.0.0.1:27017");
 const db = client.db("APLICACIONESHIBRIDAS");
 
 async function createProfile(account, profile){
-
+    console.log("account:", account)
     const newProfile = {
         ...profile,
         username: account.userName,
@@ -31,7 +31,6 @@ async function updateProfile(account, profile){
     if(!searchedProfile){
         throw new Error("Esta cuenta no tiene un perfil asociado.")
     }
-    console.log("profile:", profile);
     await db.collection('profiles').updateOne({_id: new ObjectId(account._id)}, {$set: profile});
 
     return {...searchedProfile, ...profile}

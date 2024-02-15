@@ -1,5 +1,6 @@
 import { createContext, useContext , useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { setSnackbar } from './snackbar.context.jsx';
 import * as accountServices from '../services/account/account.services.js';
 import * as profileServices from '../services/profile/profile.services.js'
 
@@ -15,6 +16,8 @@ function useProfile(){
 }
 
 function SessionProvider({children}){
+    
+    const openSnackbar = setSnackbar();
     const navigate = useNavigate();
     const [profile, setProfile] = useState({});
 
@@ -28,12 +31,14 @@ function SessionProvider({children}){
     }
 
     useEffect(() => {
+        console.log("hola")
         profileServices.getCurrent()
         .then((profile) => {
         setProfile(profile)
         })
-        .catch((err) => {
-            console.log("err:", err);
+        .catch(({error}) => {
+            if(error)
+            openSnackbar(error.message, 'error')
         })
     }, []) 
 

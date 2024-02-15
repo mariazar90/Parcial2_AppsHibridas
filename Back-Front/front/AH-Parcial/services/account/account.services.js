@@ -45,13 +45,13 @@ function getUser(){
         })
 }
 
-function register(userName, password){
+function register({userName, password, email}){
     return fetch('http://localhost:2023/api/account', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({userName, password})
+            body: JSON.stringify({userName, password, email})
         })
         .then(async response => {
             if(!response.ok) throw await response.json();

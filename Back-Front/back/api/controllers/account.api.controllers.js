@@ -16,7 +16,10 @@ async function getAccount(req, res){
 
 async function createAccount(req, res){
     return services.createAccount(req.body)
-        .then(() => {
+        .then(async (account) => {
+            return await profileServices.createProfile(account, {email:req.body.email})
+        })
+        .then((profile) => {
             res.status(201).json({ message: "Cuenta creada correctamente."});
         })
         .catch((err) => {

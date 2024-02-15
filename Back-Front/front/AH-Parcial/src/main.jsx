@@ -12,7 +12,7 @@ import ExercisePage from '../pages/exercise/ExercisePage.jsx'
 import RouterPrivate from '../components/RoutePrivate.jsx'
 import RegisterPage from '../pages/register/RegisterPage.jsx'
 import RoutineListPage from '../pages/routines/RoutineListPage.jsx'
-import UsuarioCreado from '../pages/usuariocreado/usuariocreado.jsx'
+import UsuarioCreado from '../pages/usuariocreado/UsuarioCreado.jsx'
 import RoutinePage from '../pages/routines/RoutinePage.jsx'
 import CreateRoutinePage from '../pages/routines/NewRoutine.jsx'
 import CreateDietPage from '../pages/diet/CreateDietPage.jsx'
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     element: <RegisterPage/>
   },
   {
-    path: 'usuariocreado',
+    path: '/usuariocreado',
     element: <UsuarioCreado/>
   }
 ])

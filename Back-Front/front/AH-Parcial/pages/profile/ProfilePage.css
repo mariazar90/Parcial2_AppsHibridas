@@ -2,9 +2,19 @@
     margin:auto;
     color: rgb(5, 70, 145);
 }
-
+.profile-span{
+    text-align: center;
+    color:gray;
+}
 .profile-page__header{
     display:flex;
+    align-items: center;
+    gap:10px
+}
+.profile-page__acction{
+    display:flex;
+    justify-content: center;
+    gap:10px
 }
 
 .profile-page__email span,
@@ -16,4 +26,21 @@
 
 .profile-page__body{
     margin:50px 30px;
+}
+
+.profile-edit_avatar input{
+    position: absolute;
+    z-index: 3;
+    color:transparent;
+    cursor:pointer;
+    font-size: 0;
+    width: 150px;
+    height: 150px;
+    border: 2px solid;
+    border-radius: 50%;
+}
+
+.profile-edit_avatar input:hover{
+    color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.1);
 }
