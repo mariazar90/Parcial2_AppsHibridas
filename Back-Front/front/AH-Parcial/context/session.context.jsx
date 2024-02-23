@@ -31,10 +31,10 @@ function SessionProvider({children}){
     }
 
     useEffect(() => {
-        console.log("hola")
         profileServices.getCurrent()
         .then((profile) => {
         setProfile(profile)
+        console.log("hola",profile)
         })
         .catch(({error}) => {
             if(error)

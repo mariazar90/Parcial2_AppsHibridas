@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom"
 
 import ModalComponent from '../../components/Modal/ModalComponent'
 import Bloque from '../../components/Bloque/BloqueComponent'
+import TablaComponent from '../../components/Tabla/TablaComponent.jsx';
 
 import './NewRoutine.css'
 
@@ -12,6 +13,10 @@ import { getRoutineById } from "../../services/routines/routines.services.js"
 
 
 import { useTheme } from '@mui/material/styles';
+
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,45 +43,53 @@ function NewRoutine(){
     const [modal, setModal] = useState (false);
     const [ejercicios, setEjercicios] = useState([]);
     const [bloques, setBloques] = useState ([]);
-    const [selectedDays, setSelectedDays] = useState([]);
-    const [selectedExercises, setSelectedExercises] = useState([]);
+    const [selectedDay, setSelectedDay] = useState();
+    const [allExercises, setAllExercise] = useState({});
+    const [exercise, setExercise] = useState({});
+    const [table, setTable] = useState({
+        lunes: null,
+        martes: null,
+        miercoles: null,
+        jueves: null,
+        viernes: null,
+        sabado: null,
+        domingo: null
+    }); 
     const [nuevaRutina, setNuevaRutina] = useState({name: '', description: '', routine:[]}) 
     
     const changeShow = (value) => {
         setModal(value)
     }
   
-    const handleChangeDays = (event) => {
-      const {
-        target: { value },
-      } = event;
-      setSelectedDays(
-        // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
-      );
+    const handleChangeDay = (day) => {
+      
+      setSelectedDay(day);
+      let filteredExercises = allExercises
+      if(table[day]) filteredExercises = allExercises.filter(ex1 => 
+        table[day].every(ex2 => ex2._id != ex1._id)
+      )
+      setEjercicios(filteredExercises)
+      changeShow(true)
     };
   
-    const handleChangeExercises = (event) => {
+    const handleChangeExercise = (event) => {
       const {
         target: { value },
       } = event;
-      setSelectedExercises(
+      setExercise(
         // On autofill we get a stringified value.
         typeof value === 'string' ? value.split(',') : value,
       );
     };
 
     const handleClickBloque = () => {
-        setBloques([
-                ...bloques,
-                {
-                    days: selectedDays,
-                    exercises: selectedExercises
-                }
-            ]
-        )
-        setSelectedExercises([]);
-        setSelectedDays([]);
+        const routine = {...table}
+        if(routine[selectedDay])
+            routine[selectedDay].push(exercise)
+        else routine[selectedDay] = [exercise]
+        setTable(routine)
+        setExercise({});
+        setSelectedDay(null);
         setModal(false);
     }
 
@@ -104,7 +117,7 @@ function NewRoutine(){
         let currentExercises = []
         getExercises().then((exercises) => {
             currentExercises = [...exercises]
-            setEjercicios(exercises);
+            setAllExercise(exercises);
         });
 
         if(routine){
@@ -128,9 +141,6 @@ function NewRoutine(){
         setBloques([...nuevoBloques])
     }
     const editItem = (index) => {
-        setSelectedExercises(bloques[index].exercises)
-        setSelectedDays(bloques[index].days)
-        setModal(true);
     }
     
     useEffect(() => {
@@ -151,62 +161,68 @@ function NewRoutine(){
                         <label htmlFor="name">Nombre:</label>
                         <input name="name" type="text" onChange={onChangeInput} value={nuevaRutina.name}/>
                     </div>
-                    <div>
-                        <label htmlFor="description">Descripción:</label>
-                        <input name="description" type="text" onChange={onChangeInput} value={nuevaRutina.description}/>
-                    </div>
+                    
                     <div>
                         <label htmlFor="routine">Bloque de ejercicios:</label>
-                        <button type="button" onClick={() => changeShow(true)}>+</button>
+                        
                     </div>
-                    <ul>
-                        {bloques.map((item, index) => (
-                            <Bloque item={item} index={index} key={index} deleteItem={()=>deleteItem(index)} editItem={()=>editItem(index)}/>
-                        ))}
-                    </ul>
+                    {Object.keys(table).map(day=>
+                        (
+                            <div key={day}>
+                                <div className="new-routine-page__routine">
+                                    <h2>{day}</h2>
+                                    <IconButton color="primary" aria-label="add to shopping cart" onClick={() => handleChangeDay(day)}>
+                                        <AddIcon />
+                                    </IconButton>
+                                </div>
+                                {table[day] && 
+                                <TablaComponent exercises={table[day]} editable={true}/>
+                                }
+                            </div>
+                        )
+                    )}
                     <button type="button" onClick={createRoutine}>{typeAction}</button>
                 </form>
             </div>
             <ModalComponent show={modal} closeModal={() => changeShow(false)}>
                 <form className="new-routine-form-bloque">
-                    <Select
-                        labelId="routine-day-label"
-                        id="routine-days"
-                        multiple
-                        value={selectedDays}
-                        onChange={handleChangeDays}
-                        input={<OutlinedInput label="day" />}
-                    >
-                    {DIAS_TOTALES.map((day) => (
-                        
-                        <MenuItem
-                            key={day}
-                            value={day}
-                            style={getStyles(day, selectedDays, theme)}
-                        >
-                            {day}
-                        </MenuItem>
-                    ))}
-                    </Select>
+                    <h2>Ejercicio:</h2>
                     <Select
                         labelId="routine-exercise-label"
                         id="routine-exercise"
-                        multiple
-                        value={selectedExercises}
-                        onChange={handleChangeExercises}
+                        value={exercise}
+                        onChange={handleChangeExercise}
                         input={<OutlinedInput label="exercise" />}
                     >
                     {ejercicios.map((exercise) => (
                         <MenuItem
                             key={exercise._id}
                             value={exercise}
-                            style={getStyles(exercise._id, selectedExercises, theme)}
+                            style={getStyles(exercise._id, allExercises, theme)}
                         >
                             {exercise.name}
                         </MenuItem>
                     ))}
                     </Select>
-                    <button type="button" onClick={handleClickBloque}>Agregar bloque</button>
+                    <TextField
+                        required
+                        id="outlined-series"
+                        label="Series"
+                        type="number"
+                    />
+                    <TextField
+                        required
+                        id="outlined-repeticiones"
+                        label="Repeticiones"
+                        type="number"
+                    />
+                    <TextField
+                        required
+                        id="outlined-descanso"
+                        label="Descanso"
+                        type="number"
+                    />
+                    <button type="button" onClick={handleClickBloque}>Agregar Ejercicio</button>
                 </form>
             </ModalComponent>
         </div>

@@ -22,7 +22,6 @@ function validateProfile(req, res, next){
         });
 }
 function validateUpdateProfile(req, res, next){
-    console.log("req.body:", req.body);
     return accountSchemas.updateProfile.validate(req.body, { abortEarly: false, stripUnknown: true })
         .then((profile) => {
             res.body = profile;

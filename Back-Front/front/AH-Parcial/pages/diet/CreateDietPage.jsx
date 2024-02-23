@@ -2,9 +2,11 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate, useSearchParams } from "react-router-dom"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { setSnackbar } from '../../context/snackbar.context.jsx';
 import { createDiet, getDietById, editDiet } from "../../services/diet/dieta.services.js"
 
 function CreateDietPage(){
+    const openSnackbar = setSnackbar();
     const navigate = useNavigate();
     
     let [searchParams, setSearchParams] = useSearchParams();
@@ -20,11 +22,25 @@ function CreateDietPage(){
     const handleClick = () => {
         if(typeAction=='Editar'){
             editDiet(dietForm).then((resp)=>{
+                if(resp.error)
+                    openSnackbar(resp.error.message, 'error')
+                
                 navigate('/diet', {replace:true});
+            }).catch((err)=>{
+                if(err)
+                openSnackbar(err.message, 'error')
             })
         }else{
             createDiet(dietForm).then((resp)=>{
+                console.log("resp:", resp);
+                if(resp.error)
+                    openSnackbar(resp.error.message, 'error')
+                
                 navigate('/diet', {replace:true});
+            }).catch((err)=>{
+                console.log("holaaaa")
+                if(err)
+                openSnackbar(err.message, 'error')
             })
         }
     }

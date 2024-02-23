@@ -14,6 +14,21 @@
 
     margin-bottom: 20px;
 }
+.new-routine-page__routine{
+    display: flex;
+    align-items: center;
+    gap:10px;
+}
+.new-routine-page__routine button{
+
+}
+.new-routine-page__routine h2{
+    font-style: italic;
+    width: 200px;
+    text-transform: capitalize;
+    color: rgb(5, 70, 145);
+    margin-top:10px;
+}
 .new-routine-form-bloque{   
     display: flex;
     justify-content: center;

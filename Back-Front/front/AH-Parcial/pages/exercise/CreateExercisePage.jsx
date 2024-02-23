@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate, useSearchParams } from "react-router-dom"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { setSnackbar } from '../../context/snackbar.context.jsx';
 import { createExercises, getExercisesById, editExercise } from "../../services/exercise/exercise.services.js"
 
 
 function CreateExercisePage(){
+    const openSnackbar = setSnackbar();
     const navigate = useNavigate();
     
     let [searchParams, setSearchParams] = useSearchParams();
@@ -20,10 +22,16 @@ function CreateExercisePage(){
     const handleClick = () => {
         if(typeAction=='Editar'){
             editExercise(exerciseForm).then((resp)=>{
+                if(resp.error)
+                    openSnackbar(resp.error.message, 'error')
+                
                 navigate('/exercises', {replace:true});
             })
         }else{
             createExercises(exerciseForm).then((resp)=>{
+                if(resp.error)
+                openSnackbar(resp.error.message, 'error')
+            
                 navigate('/exercises', {replace:true});
             })
         }

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import './ProfilePage.css'
-import { useProfile } from '../../context/session.context';
+import { updateProfile } from "../../services/profile/profile.services";
+import { useSession } from '../../context/session.context';
 import Avatar from '@mui/material/Avatar';
 
 function ProfilePage(){
@@ -11,7 +12,7 @@ function ProfilePage(){
         name: ''
     });
     const [editar, setEditar] = useState(false);
-    const profile = useProfile();
+    const {profile, updateProfileContext} = useSession();
 
     const handleEdit = () => {
 
@@ -23,6 +24,9 @@ function ProfilePage(){
     }
     const handleConfirm = () => {
         setEditar(false)
+        updateProfile(newProfile).then((response)=>{
+            updateProfileContext(response)
+        })
     }
 
     const onChangeInput = (event) => {
