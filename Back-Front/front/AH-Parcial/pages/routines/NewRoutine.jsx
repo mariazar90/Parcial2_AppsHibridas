@@ -45,7 +45,12 @@ function NewRoutine(){
     const [bloques, setBloques] = useState ([]);
     const [selectedDay, setSelectedDay] = useState();
     const [allExercises, setAllExercise] = useState({});
-    const [exercise, setExercise] = useState({});
+    const [exercise, setExercise] = useState({
+        exercise: {},
+        repeticiones: 0,
+        series: 0,
+        descanso: 0
+    });
     const [table, setTable] = useState({
         lunes: null,
         martes: null,
@@ -74,21 +79,25 @@ function NewRoutine(){
   
     const handleChangeExercise = (event) => {
       const {
-        target: { value },
+        target: { value , name},
       } = event;
-      setExercise(
-        // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
-      );
+      setExercise({...exercise, [name]:value});
     };
 
     const handleClickBloque = () => {
         const routine = {...table}
-        if(routine[selectedDay])
-            routine[selectedDay].push(exercise)
-        else routine[selectedDay] = [exercise]
+        if(routine[selectedDay]){
+            const index = routine[selectedDay].findIndex(ex => ex.exercise._id == exercise.exercise._id)
+            if(index != -1) routine[selectedDay][index] = exercise
+            else routine[selectedDay].push(exercise)
+        }else routine[selectedDay] = [exercise]
         setTable(routine)
-        setExercise({});
+        setExercise({
+            exercise: null,
+            repeticiones: 0,
+            series: 0,
+            descanso: 0
+        });
         setSelectedDay(null);
         setModal(false);
     }
@@ -133,14 +142,20 @@ function NewRoutine(){
         }
     }, [])
 
-    const deleteItem = (index) => {
-        const nuevoBloques = bloques;
-        const elem = nuevoBloques.splice(index, 1)[0];
-
-        console.log("nuevoBloques:", nuevoBloques);
-        setBloques([...nuevoBloques])
+    const editItem = (index, day) => {
+        const selected = table[day][index]
+        setSelectedDay(day);
+        setExercise(selected);
+        setModal(true);
     }
-    const editItem = (index) => {
+    
+    const deleteItem = (index,day) => {
+        const newTable = {...table}
+        if(newTable[day].length == 1)
+        newTable[day] = null
+        else newTable[day].splice(index,1);
+        
+        setTable(newTable);
     }
     
     useEffect(() => {
@@ -163,7 +178,7 @@ function NewRoutine(){
                     </div>
                     
                     <div>
-                        <label htmlFor="routine">Bloque de ejercicios:</label>
+                        <label htmlFor="routine">Ejercicios:</label>
                         
                     </div>
                     {Object.keys(table).map(day=>
@@ -176,7 +191,7 @@ function NewRoutine(){
                                     </IconButton>
                                 </div>
                                 {table[day] && 
-                                <TablaComponent exercises={table[day]} editable={true}/>
+                                <TablaComponent exercises={table[day]} editable={true} editItem={(index)=>editItem(index, day)} deleteItem={(index)=>deleteItem(index, day)}/>
                                 }
                             </div>
                         )
@@ -190,7 +205,8 @@ function NewRoutine(){
                     <Select
                         labelId="routine-exercise-label"
                         id="routine-exercise"
-                        value={exercise}
+                        name="exercise"
+                        value={exercise.exercise}
                         onChange={handleChangeExercise}
                         input={<OutlinedInput label="exercise" />}
                     >
@@ -206,18 +222,27 @@ function NewRoutine(){
                     </Select>
                     <TextField
                         required
+                        name="series"
+                        value={exercise.series}
+                        onChange={handleChangeExercise}
                         id="outlined-series"
                         label="Series"
                         type="number"
                     />
                     <TextField
                         required
+                        name="repeticiones"
+                        value={exercise.repeticiones}
+                        onChange={handleChangeExercise}
                         id="outlined-repeticiones"
                         label="Repeticiones"
                         type="number"
                     />
                     <TextField
                         required
+                        name="descanso"
+                        value={exercise.descanso}
+                        onChange={handleChangeExercise}
                         id="outlined-descanso"
                         label="Descanso"
                         type="number"

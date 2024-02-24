@@ -21,7 +21,7 @@ function createData(
   
 const row = createData('Frozen yoghurt', 159, 6.0, 24, 4.0);
   
-function TablaComponent({exercises, editable}){
+function TablaComponent({exercises, editable, deleteItem, editItem}){
 
    return (
     <TableContainer component={Paper}>
@@ -36,22 +36,22 @@ function TablaComponent({exercises, editable}){
           </TableRow>
         </TableHead>
         <TableBody>
-          {exercises && exercises.map((exercise) => (
+          {exercises && exercises.map((exercise, index) => (
             <TableRow
-              key={exercise.id}
+              key={exercise.exercise._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {exercise.name}
+                {exercise.exercise.name}
               </TableCell>
-              <TableCell align="right" size='string'>{row.calories}</TableCell>
-              <TableCell align="right" size='string'>{row.fat}</TableCell>
-              <TableCell align="right" size='string'>{row.carbs}</TableCell>
+              <TableCell align="right" size='string'>{exercise.series}</TableCell>
+              <TableCell align="right" size='string'>{exercise.repeticiones}</TableCell>
+              <TableCell align="right" size='string'>{exercise.descanso}</TableCell>
               {editable && (<TableCell align="right" size='string'>
-                <IconButton color="primary" aria-label="add to shopping cart">
+                <IconButton color="primary" aria-label="add to shopping cart" onClick={()=>editItem(index)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton color="primary" aria-label="add to shopping cart">
+                <IconButton color="primary" aria-label="add to shopping cart" onClick={()=>deleteItem(index)}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>)}
