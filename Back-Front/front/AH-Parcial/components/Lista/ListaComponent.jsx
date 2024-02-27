@@ -4,7 +4,7 @@ import './ListaComponent.css'
 import { useEffect, useState } from "react"
 import { Container } from "@mui/material"
 
-function ListaComponent({listado, ruta, entidad, deleteFunction}){
+function ListaComponent({listado, ruta, entidad, deleteFunction, createFunction}){
 
     const [lista, setLista] = useState(listado)
 
@@ -24,7 +24,8 @@ function ListaComponent({listado, ruta, entidad, deleteFunction}){
         <form className="list__form">
               Filtrar por: <input className="list__filter" type="text" onChange={onChangeFiltro}></input>
         </form>
-        <a href={`/${ruta}/new`}>Crear {entidad}</a>
+        <button className="list__create__button" onClick={createFunction}>Crear {entidad}</button>
+            
       </div>
       <ul>
           {lista.map(item => <ItemComponent key={item._id} item={item} ruta={ruta} deleteFunction={deleteFunction}></ItemComponent>)}

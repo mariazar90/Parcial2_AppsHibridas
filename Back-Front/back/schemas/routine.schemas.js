@@ -1,14 +1,21 @@
 import yup from 'yup';
 import * as exercisesScheme from './exercises.schemas.js'
 
+const itemExercise = yup.object({
+    exercise: exercisesScheme.exercises.required(),
+    series: yup.number().required(),
+    repeticiones: yup.number().required(),
+    descanso: yup.number().required()
+})
+
 const itemRoutine = yup.object({
-    days: yup.array().of(yup.string()),
-    exercises: yup.array().of(exercisesScheme.exercises)
+    day: yup.string().required(),
+    exercises: yup.array().of(itemExercise).required()
 })
 
 const routine = yup.object({
     description: yup.string().required(),
-    name: yup.string(),
+    name: yup.string().required(),
     routine: yup.array().of(itemRoutine)
 })
 

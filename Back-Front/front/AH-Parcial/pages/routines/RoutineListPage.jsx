@@ -2,10 +2,14 @@ import ListaComponent from "../../components/Lista/ListaComponent";
 import TabsComponent from "../../components/Tabs/TabsComponent.jsx";
 import {getRoutines, deleteRoutine} from "../../services/routines/routines.services.js"
 import { useProfile } from '../../context/session.context';
+
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from "react" 
 
 function RoutineListPage(){
     const profile = useProfile();
+
+    const navigate = useNavigate();
     const [rutinas, setRutinas] = useState([])
     const [misRutinas, setMisRutinas] = useState([])
 
@@ -16,6 +20,10 @@ function RoutineListPage(){
             })
         });
       }
+    const handleCreate = () => {
+
+        navigate('/routine/new', {replace:true});
+    }
 
     useEffect(() => {
         getRoutines().then((response) => {
@@ -29,8 +37,8 @@ function RoutineListPage(){
         }
     }, [profile, rutinas])
     
-    const children1 = <ListaComponent listado={rutinas} ruta="routine" entidad="rutina" />
-    const children2 = <ListaComponent listado={misRutinas} ruta="routine" entidad="rutina" deleteFunction={(id)=>handleDelete(id)}/>
+    const children1 = <ListaComponent listado={rutinas} ruta="routine" entidad="rutina" createFunction={handleCreate}/>
+    const children2 = <ListaComponent listado={misRutinas} ruta="routine" entidad="rutina" createFunction={handleCreate} deleteFunction={(id)=>handleDelete(id)}/>
 
     return (
         <TabsComponent 

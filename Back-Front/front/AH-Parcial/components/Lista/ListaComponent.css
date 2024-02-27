@@ -31,17 +31,20 @@
     justify-content: space-between;
     align-items: center;
 }
-.header a{
+.list__create__button{
+    border:none;
+    font-size: 20px;
     min-width: 120px;
     text-align: center;
     margin-left: 10px;
-    padding:  0.5rem 1rem;
+    padding:  0.8rem 1rem;
     display: inline-block;
     background-color: rgba(63, 193, 160, 0.848);
     border-radius: 10px;
     color:white;
     text-decoration: none;
 }
-.header a:hover{
+.list__create__button:hover{
+    cursor: pointer;
     background-color: rgba(63, 193, 160, 1);
 }

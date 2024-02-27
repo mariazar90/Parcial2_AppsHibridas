@@ -18,11 +18,9 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import Avatar from '@mui/material/Avatar';
 const DIAS_TOTALES = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
 
 function getStyles(name, personName, theme) {
@@ -73,6 +71,7 @@ function NewRoutine(){
       if(table[day]) filteredExercises = allExercises.filter(ex1 => 
         table[day].every(ex2 => ex2._id != ex1._id)
       )
+      console.log("ejercicios:", ejercicios);
       setEjercicios(filteredExercises)
       changeShow(true)
     };
@@ -102,7 +101,7 @@ function NewRoutine(){
         setModal(false);
     }
 
-    const onChangeInput = (event) => {
+    const handleChangeDetails = (event) => {
         setNuevaRutina({
             ...nuevaRutina,
             [event.target.name]: event.target.value
@@ -110,12 +109,16 @@ function NewRoutine(){
     }
 
     const createRoutine = () => {
+        const days = Object.keys(table)
+        .filter(day=>table[day])
+        .map(day=>({exercises: table[day], day}))
+        const routine = {...nuevaRutina, routine: days}
         if(typeAction == 'Editar'){
-            editRoutines(nuevaRutina).then((response) => {
+            editRoutines(routine).then((response) => {
                 navigate('/routines', {replace:true});
             })
         }else{
-            createRoutines(nuevaRutina).then((response) => {
+            createRoutines(routine).then((response) => {
                 navigate('/routines', {replace:true});
             })
         }
@@ -133,12 +136,12 @@ function NewRoutine(){
             setTypeAction('Editar')
             getRoutineById(routine).then((selectedRoutine) => {
                 setNuevaRutina(selectedRoutine)
-                setBloques(selectedRoutine.routine)
+                let nuevaTabla = {}
                 selectedRoutine.routine.forEach((elem)=>{
-                    const filtered = currentExercises.filter(exercise => !elem.exercises.some(exerciseRoutine => exercise._id == exerciseRoutine._id))
+                    nuevaTabla[elem.day] = elem.exercises
                 })
+                setTable(nuevaTabla)
             })
-
         }
     }, [])
 
@@ -157,6 +160,13 @@ function NewRoutine(){
         
         setTable(newTable);
     }
+
+    const onChangeAvatar = (event) => {
+        const [file] = event.target.files
+        if (file) {
+            setNuevaRutina({...newProfile, avatar: URL.createObjectURL(file)})
+        }
+      }
     
     useEffect(() => {
         if(bloques) {
@@ -170,22 +180,43 @@ function NewRoutine(){
     return (
         <div className="new-routine">
             <h1 className="new-routine-section__h1">Nueva Rutina</h1>
-            <div className="new-routine-section">
-                <form className="new-routine-form">
-                    <div>
-                        <label htmlFor="name">Nombre:</label>
-                        <input name="name" type="text" onChange={onChangeInput} value={nuevaRutina.name}/>
-                    </div>
-                    
-                    <div>
-                        <label htmlFor="routine">Ejercicios:</label>
-                        
-                    </div>
+            
+            <div className="new-routine-page__header">
+                <div className="new-routine-edit_avatar">
+                    <input type="file" accept="image/png, image/jpeg" onChange={onChangeAvatar}/>
+                    <Avatar variant="square" src={nuevaRutina.avatar} sx={{minWidth: 150, minHeight: 150}}/>
+                </div>
+                <div className="new-routine-page__textbox">
+                    <TextField
+                        className="new-routine-page__title"
+                        required
+                        name="name"
+                        value={nuevaRutina.name}
+                        onChange={handleChangeDetails}
+                        id="name"
+                        placeholder="Nombre"
+                        variant="standard"
+                        type="text"
+                    />
+                    <TextField
+                        required
+                        variant="standard"
+                        name="description"
+                        value={nuevaRutina.description}
+                        onChange={handleChangeDetails}
+                        id="descripcion"
+                        placeholder="Descripción"
+                        type="text"
+                    />
+                </div>
+            </div>
+                
+            <div>
                     {Object.keys(table).map(day=>
                         (
-                            <div key={day}>
+                            <div className="new-routine-day" key={day}>
                                 <div className="new-routine-page__routine">
-                                    <h2>{day}</h2>
+                                    <h3>{day}</h3>
                                     <IconButton color="primary" aria-label="add to shopping cart" onClick={() => handleChangeDay(day)}>
                                         <AddIcon />
                                     </IconButton>
@@ -196,8 +227,8 @@ function NewRoutine(){
                             </div>
                         )
                     )}
-                    <button type="button" onClick={createRoutine}>{typeAction}</button>
-                </form>
+                    <button className="new-routine-page__button" type="button" onClick={createRoutine}>{typeAction} Rutina</button>
+                
             </div>
             <ModalComponent show={modal} closeModal={() => changeShow(false)}>
                 <form className="new-routine-form-bloque">
@@ -206,6 +237,7 @@ function NewRoutine(){
                         labelId="routine-exercise-label"
                         id="routine-exercise"
                         name="exercise"
+                        label="Ejercicio"
                         value={exercise.exercise}
                         onChange={handleChangeExercise}
                         input={<OutlinedInput label="exercise" />}
@@ -247,7 +279,7 @@ function NewRoutine(){
                         label="Descanso"
                         type="number"
                     />
-                    <button type="button" onClick={handleClickBloque}>Agregar Ejercicio</button>
+                    <button className="new-routine-page__button" type="button" onClick={handleClickBloque}>Agregar Ejercicio</button>
                 </form>
             </ModalComponent>
         </div>

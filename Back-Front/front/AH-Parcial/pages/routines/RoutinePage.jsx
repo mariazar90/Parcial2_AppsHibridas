@@ -35,11 +35,8 @@ function RoutinePage(){
             const newTable = {...table}
             for (let i = 0; i < routine.routine.length; i++) {
                 const bloque = routine.routine[i];
-                const exercisesArray = []
-                for (let j = 0; j < bloque.days.length; j++) {
-                    const day = bloque.days[j];
-                    newTable[day.toLowerCase()] = bloque.exercises;
-                }  
+                const day = bloque.day;
+                newTable[day.toLowerCase()] = bloque.exercises;
             }
             setTable(newTable);
         }

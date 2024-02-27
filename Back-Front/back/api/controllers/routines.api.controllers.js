@@ -76,6 +76,7 @@ function createRoutines(req, res){
         routine: req.body.routine,
         user_id: req.account._id
     };
+    console.log("hola:", routine)
     services.createRoutine(routine)
         .then(function (newRoutine){
             res.status(201).json(newRoutine)

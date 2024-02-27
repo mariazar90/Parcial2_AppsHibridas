@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import Button from '@mui/material/Button';
 import PropTypes from 'prop-types'
 import './ItemComponent.css'
 
@@ -12,13 +11,10 @@ function ItemComponent({item, ruta, deleteFunction}){
           <h2 className="list-item__name">{item.name}</h2>
           <p className="list-item__description">{item.description}</p>
           <div className="list-item__action">
-            <div className="list-item__button">
-              <Link className="list-item__full" to={`/${ruta}/${item._id}`}>Ver</Link>
-            </div>
+            <Link className="list-item__button" to={`/${ruta}/${item._id}`}>Ver</Link>
+            
             {deleteFunction &&
-              <div className="list-item__button">
-                <Button className="list-item__full" variant="text" onClick={()=>deleteFunction(item._id)}>Eliminar</Button>
-              </div>
+                <button className="list-item__button" variant="text" onClick={()=>deleteFunction(item._id)}>Eliminar</button>
             }
           </div>
         </div>

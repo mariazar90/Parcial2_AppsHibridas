@@ -1,5 +1,48 @@
 .new-routine {
-    padding:40px;
+    margin: 1.5rem auto;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 2rem;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(56, 56, 56, 0.237);
+    font-size: 1.6rem;
+    text-align: left;
+}
+
+.new-routine-page__header{
+    display: flex;
+    align-items: center;
+    gap:40px;
+    justify-content: start;
+    margin-bottom:2rem;
+}
+.new-routine-page__textbox{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+    width: 80%;
+}
+
+.new-routine-edit_avatar input{
+    position: absolute;
+    z-index: 3;
+    color:transparent;
+    cursor:pointer;
+    font-size: 0;
+    width: 150px;
+    height: 150px;
+    border: 2px solid;
+}
+
+.new-routine-edit_avatar input:hover{
+    color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.1);
+}
+.new-routine-page__title input{
+    color: rgb(5, 70, 145);
+    font-size: 36px;
+    font-weight: bold;
 }
 
 .new-routine-section {
@@ -8,21 +51,42 @@
 
 .new-routine-section__h1 {
     color: #054691;
+    text-align: center;
 }
 
 .new-routine-form {
 
-    margin-bottom: 20px;
+    margin: 20px;
+}
+.new-routine-form_item {
+    margin-bottom: 10px;
+    display:flex;
+    align-items: center;
+    gap:20px;
+}
+h2{
+    color: #054691;
+
+}
+.new-routine-day{
+    margin: 0px 40px;
 }
 .new-routine-page__routine{
     display: flex;
     align-items: center;
     gap:10px;
 }
-.new-routine-page__routine button{
-
+.new-routine-page__button{
+    margin: 40px 0px;
+    font-size: 18px;
+    border:none;
+    background-color: #5CCAAF;
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
 }
-.new-routine-page__routine h2{
+.new-routine-page__routine h3{
     font-style: italic;
     width: 200px;
     text-transform: capitalize;
@@ -43,12 +107,4 @@
 
 .home-section__button__container :first-child{
     margin-right: 12px;
-}
-
-.home-section__button {
-    background-color: #5CCAAF;
-    padding: 12px;
-    text-decoration: none;
-    color: white;
-    border-radius: 8px;
 }

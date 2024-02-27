@@ -2,15 +2,24 @@
     background: rgba(0,0,0,0.45);
     height: -webkit-fill-available;
     width: -webkit-fill-available;
-    position: absolute;
+    position: fixed;
     left: 0;
     top:0;
     display: flex;
+    z-index:2;
     justify-content: center;
     align-items: center;
 }
 
+.modal-card > button:first-child{
+    position:absolute;
+    right: 5px;
+    top:5px;
+}
+
 .modal-card{
+    padding:20px;
+    position:relative;
     background:white;
     width: 500px;
     height: 500px;

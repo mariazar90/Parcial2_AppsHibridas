@@ -1,5 +1,8 @@
 
 import PropTypes from 'prop-types'
+
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import './ModalComponent.css'
 import { useEffect, useState } from "react"
 
@@ -11,7 +14,9 @@ function ModalComponent({show, children, closeModal}){
       (
         <div className="modal">
           <div className="modal-card">
-            <div className="modal-card-header"><button onClick={closeModal}>x</button></div>
+            <IconButton aria-label="close" size="small" color="error" onClick={closeModal}>
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
             {children}
           </div>
         </div>

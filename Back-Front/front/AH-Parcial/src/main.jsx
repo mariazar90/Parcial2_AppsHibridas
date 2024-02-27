@@ -15,8 +15,6 @@ import RoutineListPage from '../pages/routines/RoutineListPage.jsx'
 import UsuarioCreado from '../pages/usuariocreado/UsuarioCreado.jsx'
 import RoutinePage from '../pages/routines/RoutinePage.jsx'
 import CreateRoutinePage from '../pages/routines/NewRoutine.jsx'
-import CreateDietPage from '../pages/diet/CreateDietPage.jsx'
-import CreateExercisePage from '../pages/exercise/CreateExercisePage.jsx'
 import ProfilePage from '../pages/profile/PerfilPage.jsx'
 
 const router = createBrowserRouter([
@@ -34,10 +32,6 @@ const router = createBrowserRouter([
         element: <DietListPage/>
       },  
       {
-        path: 'diet/new',
-        element: <CreateDietPage/>
-      },
-      {
         path: 'diet/:idDiet',
         element: <DietPage/>
       },
@@ -45,10 +39,6 @@ const router = createBrowserRouter([
         path: 'exercises',
         element: <ExerciseListPage/>
       },  
-      {
-        path: 'exercises/new',
-        element: <CreateExercisePage/>
-      },
       {
         path: 'exercises/:idExercise',
         element: <ExercisePage/>
