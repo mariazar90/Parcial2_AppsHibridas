@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import './ItemComponent.css'
+import { useProfile } from '../../../context/session.context'
 
 function ItemComponent({item, ruta, deleteFunction}){
+    const profile = useProfile()
 
     return(
         <li className="list-item">

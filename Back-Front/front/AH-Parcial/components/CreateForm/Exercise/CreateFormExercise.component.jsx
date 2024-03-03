@@ -3,8 +3,12 @@ import { useEffect, useState } from "react"
 
 import TextField from '@mui/material/TextField';
 import './CreateFormExercise.component.css'
+import { useLoading } from "../../../context/loading.context.jsx";
+import { setSnackbar } from "../../../context/snackbar.context.jsx";
 function CreateFormExerciseComponent({confirmForm, closeForm, exercise}){
     
+    const { loading, setLoading } = useLoading();
+    const openSnackbar = setSnackbar();
     const [exerciseForm, setExerciseForm] = useState ({
         name: '',
         description: ''
@@ -16,13 +20,17 @@ function CreateFormExerciseComponent({confirmForm, closeForm, exercise}){
 
     const handleClick = async () => {
         try {
+            setLoading(true)
             if(exercise){
                 const resp = await editExercise(exerciseForm);
                 if(resp.error)  openSnackbar(resp.error.message, 'error')
+                else openSnackbar('Editado correctamente!', 'success')
             }else{
                 const resp = await createExercises(exerciseForm);
                 if(resp.error)  openSnackbar(resp.error.message, 'error')
+                else openSnackbar('Creado correctamente!', 'success')
             }
+            setLoading(false)
             setExerciseForm({
                 name: '',
                 description: ''
@@ -31,6 +39,7 @@ function CreateFormExerciseComponent({confirmForm, closeForm, exercise}){
         } catch (error) {
             if(error)openSnackbar(error.message, 'error')
             closeForm();
+            setLoading(false)
             
         }
     }
@@ -47,7 +56,7 @@ function CreateFormExerciseComponent({confirmForm, closeForm, exercise}){
             <h1>Nuevo Ejercicio</h1>
             <div>
             
-                <TextField className="new-exercise-field" id="outlined-basic" name="name" label="Nombre" variant="outlined" value={exerciseForm.name} onChange={(e)=>handleChange(e.target)}/>
+                <TextField disabled={loading} className="new-exercise-field" id="outlined-basic" name="name" label="Nombre" variant="outlined" value={exerciseForm.name} onChange={(e)=>handleChange(e.target)}/>
             </div>
             <div>
                 <TextField 
@@ -59,10 +68,11 @@ function CreateFormExerciseComponent({confirmForm, closeForm, exercise}){
                     maxRows={3}
                     label="Descripción"
                     variant="outlined"
+                    disabled={loading}
                     value={exerciseForm.description} onChange={(e)=>handleChange(e.target)}/>
             </div>
             
-            <button className="new-exercise__button" variant="contained" onClick={handleClick}>{exercise?'Editar':'Crear'}</button>
+            <button disabled={loading} className="new-exercise__button" variant="contained" onClick={handleClick}>{exercise?'Editar':'Crear'}</button>
         </div>
     </>)
 }

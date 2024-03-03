@@ -9,6 +9,35 @@
     flex-direction: column;
     align-items: center;
 }
+.modal-item-container{
+    margin:20px;
+}
+.modal-item-container > h2{
+    text-align: center;
+}
+.modal-item-container > h3{
+    margin: 20px 0;
+}
+.modal-item-action{
+    display:flex;
+    justify-content: center;
+}
+.modal-item-action > button{
+    min-width: 120px;
+    text-align: center;
+    margin-left: 10px;
+    padding:  0.5rem 1rem;
+    display: inline-block;
+    background-color: rgba(63, 193, 160, 0.848);
+    border-radius: 10px;
+    border:none;
+    font-size: 18px;
+    color: white;
+}
+.modal-item-action > button:hover{
+    background-color: rgba(63, 193, 160, 1);
+    cursor:pointer;
+}
 
 .list__form{
     margin: 0;

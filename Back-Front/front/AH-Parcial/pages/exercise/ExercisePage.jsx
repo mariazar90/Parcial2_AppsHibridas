@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import ModalComponent from '../../components/Modal/ModalComponent';
 import CreateFormExerciseComponent from "../../components/CreateForm/Exercise/CreateFormExercise.component";
@@ -12,14 +12,14 @@ function ExercisePage(){
     const {idExercise} = useParams()
     const navigate = useNavigate();
     
-    const changeShow = (value) => {
+    const changeShow = useCallback((value) => {
         setModal(value)
-      }
+      }, [setModal])
       
-    const handleConfirm = async () => {
+    const handleConfirm = useCallback(async () => {
           changeShow();
           navigate('/exercises', {replace:true});
-    }
+    },[navigate])
 
     useEffect(() => {
         fetch(`http://localhost:2023/api/exercises/${idExercise}`,{

@@ -1,3 +1,4 @@
+import { useMemo, useCallback  } from 'react';
 import { createContext, useContext , useState } from 'react';
 
 const SnackbarContext = createContext();
@@ -13,21 +14,32 @@ function setSnackbar(){
 
 function SnackbarProvider({children}){
     const [open, setOpen] = useState(false)
-    const [type, setType] = useState(false)
+    const [type, setType] = useState('success')
     const [message, setMessage] = useState("")
 
-    const openSnackbar = (msg, typeSnackbar) =>{
+    const openSnackbar = useCallback((msg, typeSnackbar) =>{
         setMessage(msg);
         setOpen(true);
         setType(typeSnackbar)
-    }
-    const onClose = () =>{
+    },[setMessage,setOpen,setType]);
+
+    const onClose = useCallback(() =>{
         setOpen(false);
         setMessage("");
-    }
+    },[setOpen,setMessage])
+
+    const value = useMemo(()=>{
+        return {
+            openSnackbar,
+            onClose,
+            open,
+            message,
+            type
+        }
+    },[openSnackbar,onClose,open,message,type])
 
     return (
-        <SnackbarContext.Provider value={{openSnackbar, onClose, open, message, type}}>
+        <SnackbarContext.Provider value={value}>
           {children}
         </SnackbarContext.Provider>
       )

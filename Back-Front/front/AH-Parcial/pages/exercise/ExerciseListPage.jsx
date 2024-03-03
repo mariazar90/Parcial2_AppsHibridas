@@ -2,34 +2,46 @@ import ListaComponent from "../../components/Lista/ListaComponent";
 import ModalComponent from '../../components/Modal/ModalComponent'
 
 import {getExercises, deleteExercise} from "../../services/exercise/exercise.services.js"
-import { useEffect, useState } from "react" 
+import { useEffect, useState, useCallback } from "react" 
 import CreateFormExerciseComponent from "../../components/CreateForm/Exercise/CreateFormExercise.component";
+import { setSnackbar } from "../../context/snackbar.context";
+import { useLoading } from "../../context/loading.context";
 
 function ExerciseListPage(){
+    const openSnackbar = setSnackbar();
+    const { setLoading } = useLoading(); 
     const [ejercicios, setEjercicios] = useState([])
     const [modal, setModal] = useState (false);
     
-    const handleDelete = (id) => {
-      
+    const init = useCallback(() => {
+      setLoading(true);
+      getExercises().then((response) => {
+        if(response.error){
+          openSnackbar(response.error.message, 'error');
+        }else{
+          setEjercicios(response);
+        }
+        setLoading(false);
+      }).catch(error => {
+        setLoading(false);
+        openSnackbar(error.message, 'error');
+      });
+    }, [setEjercicios])
+
+    const handleDelete = useCallback((id) => {
       deleteExercise(id).then(() => {
         init()
       });
-    }
+    },[init])
     
-    const changeShow = (value) => {
+    const changeShow = useCallback((value) => {
       setModal(value)
-    }
+    }, [setModal])
 
-    const handleConfirm = async () => {
+    const handleConfirm = useCallback(async () => {
       await init();
       changeShow();
-    }
-
-    const init = () => {
-      getExercises().then((exercises) => {
-        setEjercicios(exercises);
-      });
-    }
+    }, [init, changeShow]);
 
     useEffect(() => {
       init()

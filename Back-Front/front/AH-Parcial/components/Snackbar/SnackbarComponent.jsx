@@ -2,7 +2,6 @@
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-import './SnackbarComponent.css'
 import { useSnackbar } from '../../context/snackbar.context'
 
 function SnackbarComponent(){

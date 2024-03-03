@@ -1,0 +1,16 @@
+.skeleton-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin-top: 1.5rem;
+    width: 70%;
+    padding:15px;
+    gap:10px;
+    background-color: white;
+    -webkit-box-shadow: 0px 7px 15px -2px rgba(0,0,0,0.58);
+-moz-box-shadow: 0px 7px 15px -2px rgba(0,0,0,0.58);
+box-shadow: 0px 7px 15px -2px rgba(0,0,0,0.58);
+}
+.skeleton-item-action{
+    margin:20px 0;
+}

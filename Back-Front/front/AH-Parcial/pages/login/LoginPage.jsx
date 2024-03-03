@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import * as accountServices from '../../services/account/account.services.js';
 import './LoginPage.css';
 
@@ -12,19 +12,19 @@ function LoginPage(){
     const changeUserName = (event) => {
         setUserName(event.target.value)
     }
+
     const changePassword = (event) => {
         setPassword(event.target.value)
     }
+
     const onSubmit = async (event) => {
         event.preventDefault();
         accountServices.login(userName, password)
         .then(data =>{
             setError('')
-            console.log("Session iniciada", data);
             navigate('/', {replace:true});
         })
         .catch(err => {
-            console.log("err:", err);
             setError(err.error.message)
         })
         

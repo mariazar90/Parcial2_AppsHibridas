@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import './ProfilePage.css'
 import { updateProfile } from "../../services/profile/profile.services";
 import { useSession } from '../../context/session.context';
+import { getRoutineById } from "../../services/routines/routines.services";
+import { getDietById } from "../../services/diet/dieta.services";
 import Avatar from '@mui/material/Avatar';
+import { useSnackbar } from "../../context/snackbar.context";
 
 function ProfilePage(){
+
+    const {openSnackbar} = useSnackbar()
     const [newProfile, setNewProfile] = useState({
         avatar:'',
         name: ''
+    });
+    const [asignaciones, setAsignaciones] = useState({
+        rutina:'',
+        dieta: ''
     });
     const [editar, setEditar] = useState(false);
     const {profile, updateProfileContext} = useSession();
@@ -22,9 +31,11 @@ function ProfilePage(){
         })
         setEditar(true)
     }
+
     const handleConfirm = () => {
+        const {avatar,email,name,username } = newProfile
         setEditar(false)
-        updateProfile(newProfile).then((response)=>{
+        updateProfile({email,name,username}).then((response)=>{
             updateProfileContext(response)
         })
     }
@@ -42,6 +53,32 @@ function ProfilePage(){
             setNewProfile({...newProfile, avatar: URL.createObjectURL(file)})
         }
       }
+
+    useEffect(()=>{
+
+        const getAsignaciones = async () => {
+            if(profile){
+                const nuevaAsignacion = {rutina:'',dieta:''}
+                if(profile.routine){
+                    const {name:rutina} = await getRoutineById(profile.routine)
+                    nuevaAsignacion.rutina = rutina;
+                }
+
+                if(profile.diet){
+                    const {name:dieta} = await getDietById(profile.diet)
+                    nuevaAsignacion.dieta = dieta
+                }
+                
+                setAsignaciones(nuevaAsignacion)
+            }
+        }
+
+        getAsignaciones().catch(error => {
+            openSnackbar(error.message,'error');
+        })
+
+    },[profile])
+
     return(
         <div className='diet-page'>
         {
@@ -62,8 +99,8 @@ function ProfilePage(){
                         <div className='profile-page__body'>
                             <p className="profile-page__email"><span>Email: </span>{profile.email}</p>
                             <p className="profile-page__username"><span>Username: </span>{profile.username}</p>
-                            <p className="profile-page__routine"><span>Rutina: </span>{profile.routine?profile.routine:'-'}</p>
-                            <p className="profile-page__routine"><span>Dieta: </span>{profile.diet?profile.diet:'-'}</p>
+                            <p className="profile-page__routine"><span>Rutina: </span>{asignaciones.rutina}</p>
+                            <p className="profile-page__routine"><span>Dieta: </span>{asignaciones.dieta}</p>
                         </div>
                         </>
                 ):
@@ -80,8 +117,8 @@ function ProfilePage(){
                         <div className='profile-page__body'>
                             <p className="profile-page__email"><span>Email: </span><TextField name="email" value={newProfile.email} id="outlined-basic" variant="standard" onChange={onChangeInput}/></p>
                             <p className="profile-page__username"><span>Username: </span>{profile.username}</p>
-                            <p className="profile-page__routine"><span>Rutina: </span>{profile.routine?profile.routine:'-'}</p>
-                            <p className="profile-page__routine"><span>Dieta: </span>{profile.diet?profile.diet:'-'}</p>
+                            <p className="profile-page__routine"><span>Rutina: </span>{asignaciones.rutina}</p>
+                            <p className="profile-page__routine"><span>Dieta: </span>{asignaciones.dieta}</p>
                         </div>
                     </>
                 )

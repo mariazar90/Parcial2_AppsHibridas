@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { updateProfile } from "../../services/profile/profile.services.js"
 import { getRoutineById } from "../../services/routines/routines.services.js"
@@ -22,13 +22,27 @@ function RoutinePage(){
     }); 
     const navigate = useNavigate();
 
-    const agregarRutina = () => {
+    const agregarRutina = useCallback(() => {
       updateProfile({routine: routine._id})
       .then(newProfile => {
-        updateProfileContext(newProfile)
+        updateProfileContext({routine: routine._id})
         navigate('/', {replace:true});
       })
-    }
+    },[navigate, routine])
+
+    
+
+    const desasignarRutina = useCallback(() => {
+        updateProfile({routine: ''})
+        .then(user => {
+          if(user.error){
+            openSnackbar(user.error.message, 'error')
+          }else{
+            updateProfileContext({routine: ''})
+            navigate('/', {replace:true});
+          }
+        })
+      }, [navigate])
     
     useEffect(() => {
         if(routine && routine.routine){
@@ -59,7 +73,10 @@ function RoutinePage(){
                     <p className="routine-page__description">{routine.description}</p>
                 </div>
                 <div className="routine-page__action">
-                    <button className="routine-page__button" onClick={agregarRutina}>Asignar</button>
+                    {profile?.routine == idRoutine ? 
+                    <button className="routine-page__button" onClick={desasignarRutina}>Desasignar</button>
+                    :<button className="routine-page__button" onClick={agregarRutina}>Asignar</button>
+                    }
                     {routine.user_id == profile._id && <button className="routine-page__button"><a href={`/routine/new?routine=${routine._id}`}>Editar</a></button>}
                 </div>
             </div>

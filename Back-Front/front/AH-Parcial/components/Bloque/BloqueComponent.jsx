@@ -13,14 +13,8 @@ function Bloque({item, index, deleteItem, editItem}) {
         const parseExercises = item.exercises.reduce((a,b)=>{
             return {name:a.name+', '+b.name}
         });
-        console.log("parseExercises:", parseExercises);
         setExercises(parseExercises.name)
     }
-
-    useEffect(()=>{
-        console.log(item)
-    },[])
-
     
     useEffect(()=>{
         if(item.days) getDays()

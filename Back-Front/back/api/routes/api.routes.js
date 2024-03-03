@@ -20,6 +20,7 @@ route.post('/profile', [tokenVerify, validateProfile], accountControllers.create
 route.get('/profile', [tokenVerify], accountControllers.getProfile);
 route.patch('/profile', [tokenVerify, validateUpdateProfile], accountControllers.updateProfile);
 
+
 route.use('/diet', tokenVerify);
 route.get('/diet', dietController.getDiet)
 route.get('/diet/:idDiet', dietController.getDietbyId)

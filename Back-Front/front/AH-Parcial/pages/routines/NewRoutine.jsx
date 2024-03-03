@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate, useSearchParams } from "react-router-dom"
 
 import ModalComponent from '../../components/Modal/ModalComponent'
-import Bloque from '../../components/Bloque/BloqueComponent'
 import TablaComponent from '../../components/Tabla/TablaComponent.jsx';
 
 import './NewRoutine.css'
@@ -10,7 +9,6 @@ import './NewRoutine.css'
 import {getExercises} from "../../services/exercise/exercise.services.js"
 import { createRoutines, editRoutines } from "../../services/routines/routines.services.js"
 import { getRoutineById } from "../../services/routines/routines.services.js"
-
 
 import { useTheme } from '@mui/material/styles';
 
@@ -20,7 +18,9 @@ import AddIcon from '@mui/icons-material/Add';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Avatar from '@mui/material/Avatar';
+
+import { setSnackbar } from "../../context/snackbar.context";
+import { useLoading } from "../../context/loading.context";
 const DIAS_TOTALES = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
 
 function getStyles(name, personName, theme) {
@@ -33,6 +33,8 @@ function getStyles(name, personName, theme) {
   }
 
 function NewRoutine(){
+    const openSnackbar = setSnackbar();
+    const { setLoading,loading } = useLoading(); 
     const theme = useTheme();
     const navigate = useNavigate();
     let [searchParams, setSearchParams] = useSearchParams();
@@ -71,7 +73,6 @@ function NewRoutine(){
       if(table[day]) filteredExercises = allExercises.filter(ex1 => 
         table[day].every(ex2 => ex2._id != ex1._id)
       )
-      console.log("ejercicios:", ejercicios);
       setEjercicios(filteredExercises)
       changeShow(true)
     };
@@ -108,19 +109,28 @@ function NewRoutine(){
         })
     }
 
-    const createRoutine = () => {
+    const createRoutine = async () => {
         const days = Object.keys(table)
         .filter(day=>table[day])
         .map(day=>({exercises: table[day], day}))
         const routine = {...nuevaRutina, routine: days}
-        if(typeAction == 'Editar'){
-            editRoutines(routine).then((response) => {
+        try {
+            setLoading(true);
+            if(typeAction == 'Editar'){
+                await editRoutines(routine)
+                openSnackbar('Editado correctamente!', 'success')
                 navigate('/routines', {replace:true});
-            })
-        }else{
-            createRoutines(routine).then((response) => {
+            }else{
+                await createRoutines(routine)
+                openSnackbar('Creado correctamente!', 'success')
                 navigate('/routines', {replace:true});
-            })
+            }
+            setLoading(false);
+            
+        } catch (error) {
+            openSnackbar(error.message, 'error')
+            setLoading(false);
+            
         }
     }
 
@@ -182,10 +192,6 @@ function NewRoutine(){
             <h1 className="new-routine-section__h1">Nueva Rutina</h1>
             
             <div className="new-routine-page__header">
-                <div className="new-routine-edit_avatar">
-                    <input type="file" accept="image/png, image/jpeg" onChange={onChangeAvatar}/>
-                    <Avatar variant="square" src={nuevaRutina.avatar} sx={{minWidth: 150, minHeight: 150}}/>
-                </div>
                 <div className="new-routine-page__textbox">
                     <TextField
                         className="new-routine-page__title"
@@ -227,7 +233,7 @@ function NewRoutine(){
                             </div>
                         )
                     )}
-                    <button className="new-routine-page__button" type="button" onClick={createRoutine}>{typeAction} Rutina</button>
+                    <button disabled={loading} className="new-routine-page__button" type="button" onClick={createRoutine}>{typeAction} Rutina</button>
                 
             </div>
             <ModalComponent show={modal} closeModal={() => changeShow(false)}>

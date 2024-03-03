@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { updateProfile } from "../../services/profile/profile.services.js"
 import { getDietById } from "../../services/diet/dieta.services"
@@ -6,38 +6,63 @@ import { useSession } from '../../context/session.context';
 import ModalComponent from '../../components/Modal/ModalComponent';
 import CreateFormDietComponent from "../../components/CreateForm/Diet/CreateFormDiet.component";
 
+import { setSnackbar } from "../../context/snackbar.context.jsx";
 import './DietPage.css'
 
 function DietPage(){
-  const { updateProfileContext } = useSession();
+    const { updateProfileContext, profile } = useSession();
+    const openSnackbar = setSnackbar();
     const [diet, setDiet] = useState ({})
     const [role, setRole] = useState ('ADMIN')
     const [modal, setModal] = useState (false);
     const {idDiet} = useParams()
     const navigate = useNavigate();
 
-    const agregarDieta = () => {
+    const agregarDieta = useCallback(() => {
       updateProfile({diet: diet._id})
       .then(user => {
-        updateProfileContext(newProfile)
-        navigate('/', {replace:true});
+        if(user.error){
+          openSnackbar(user.error.message, 'error')
+        }else{
+          updateProfileContext({diet: diet._id})
+          navigate('/', {replace:true});
+        }
       })
-    }
+    }, [navigate, diet])
 
-    const changeShow = (value) => {
+    const desasignarDieta = useCallback(() => {
+      updateProfile({diet: ''})
+      .then(user => {
+        if(user.error){
+          openSnackbar(user.error.message, 'error')
+        }else{
+          updateProfileContext({diet: ''})
+          navigate('/', {replace:true});
+        }
+      })
+    }, [navigate])
+
+    const changeShow = useCallback((value) => {
       setModal(value)
-    }
+    }, [setModal])
     
-    const handleConfirm = () => {
+    const handleConfirm = useCallback(() => {
         changeShow();
         navigate('/diet', {replace:true});
-    }
+    }, [navigate])
 
     useEffect(() => {
       if(idDiet){
         getDietById(idDiet)
           .then(data => {
+            if(data.error){
+              openSnackbar(data.error.message, 'error')
+            }else{
             setDiet(data)
+            }
+          }).catch((error)=>{
+            
+            openSnackbar(error.message, 'error')
           })
       }
     }, [idDiet])
@@ -52,7 +77,10 @@ function DietPage(){
           <p className="diet-page__calories"><span>Calorías:</span> {diet.calories}</p>
           <p className="diet-page__description"><span>Descripción:</span> {diet.description}</p>
           <div className='diet-page__action'>
-            <button className="diet-page__button" onClick={agregarDieta}><a href="/">Agregar dieta</a></button>
+            {profile?.diet == idDiet ? 
+            (<button className="diet-page__button" onClick={desasignarDieta}><a href="/">Desasignar dieta</a></button>)
+            :(<button className="diet-page__button" onClick={agregarDieta}><a href="/">Asignar dieta</a></button>)
+            }
             {role == 'ADMIN' && <button className="diet-page__button" onClick={() => changeShow(true)}>Editar</button>}
           </div>
         </div>

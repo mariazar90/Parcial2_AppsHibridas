@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import * as accountServices from '../../services/account/account.services.js';
 import * as profileServices from '../../services/profile/profile.services.js';
@@ -29,6 +29,7 @@ function RegisterPage(){
             [event.target.name]: event.target.value
         })
     }
+
     const onSubmitAccount = async (event) => {
         event.preventDefault();
         if(account.password != account.verificationPassword) 
@@ -42,7 +43,6 @@ function RegisterPage(){
                 /* navigate('/login', {replace:true}); */
             })
             .catch(err => {
-                console.log("err:", err);
                 setError(err.error.message)
             })
         }
@@ -56,20 +56,20 @@ function RegisterPage(){
                     <h2  className="login-form__title">Crear cuenta</h2>
                     <label  className="login-form__field">
                         Nombre de usuario:
-                        <input name='userName' type="text" value={account.userName} onChange={changeAccount}/>
+                        <input name='userName' type="text" value={account.userName} onChange={(e)=>changeAccount(e)}/>
                     </label>
 
                     <label  className="login-form__field">
                         Email:
-                        <input name='email' type="email" value={account.email} onChange={changeAccount}/>
+                        <input name='email' type="email" value={account.email} onChange={(e)=>changeAccount(e)}/>
                     </label>
                     <label  className="login-form__field">
                         Contraseña:
-                        <input name='password' type="password" value={account.password} onChange={changeAccount}/>
+                        <input name='password' type="password" value={account.password} onChange={(e)=>changeAccount(e)}/>
                     </label>
                     <label  className="login-form__field">
                         Repita la Contraseña:
-                        <input name='verificationPassword' type="password" value={account.verificationPassword} onChange={changeAccount}/>
+                        <input name='verificationPassword' type="password" value={account.verificationPassword} onChange={(e)=>changeAccount(e)}/>
                     </label>
                     <p className="login-form__error">{error}</p>
                     <button type="submit"  className="login-form__submit">Crear cuenta</button>

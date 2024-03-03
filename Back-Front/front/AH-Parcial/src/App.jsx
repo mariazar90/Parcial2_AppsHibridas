@@ -5,11 +5,13 @@ import Footer from './Footer.jsx'
 import SnackbarComponent from '../components/Snackbar/SnackbarComponent.jsx';
 import MainHeader from '../components/MainHeader/MainHeader.jsx';
 import './App.css'
+import { LoadingProvider } from '../context/loading.context.jsx';
 
 function App() {
   
 
  return (
+  <LoadingProvider>
     <SnackbarProvider>
       <SessionProvider >
         <SnackbarComponent></SnackbarComponent>
@@ -18,6 +20,7 @@ function App() {
         <Footer></Footer>
       </SessionProvider>
     </SnackbarProvider>
+  </LoadingProvider>
   )
 }
 

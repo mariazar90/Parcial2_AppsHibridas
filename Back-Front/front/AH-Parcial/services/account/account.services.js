@@ -26,7 +26,7 @@ function logout(){
         }
     })
     .catch(err => {
-        console.log("err:", err);
+        throw err.json();
     })
     localStorage.removeItem('token');
 }

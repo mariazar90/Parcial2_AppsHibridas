@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     gap:40px;
-    justify-content: start;
+    justify-content: center;
     margin-bottom:2rem;
 }
 .new-routine-page__textbox{

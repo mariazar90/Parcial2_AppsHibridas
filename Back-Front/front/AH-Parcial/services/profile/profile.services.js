@@ -13,7 +13,6 @@ function getCurrent(){
 }
 
 function updateProfile(profile){
-    console.log("profileprofile:", profile)
     return fetch('http://localhost:2023/api/profile', {
             method: 'PATCH',
             headers: {

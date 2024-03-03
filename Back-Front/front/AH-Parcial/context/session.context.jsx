@@ -1,4 +1,4 @@
-import { createContext, useContext , useState, useEffect } from 'react';
+import { createContext, useContext , useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { setSnackbar } from './snackbar.context.jsx';
 import * as accountServices from '../services/account/account.services.js';
@@ -21,29 +21,37 @@ function SessionProvider({children}){
     const navigate = useNavigate();
     const [profile, setProfile] = useState({});
 
-    const updateProfileContext = (newValues) =>{
+    const updateProfileContext = useCallback((newValues) =>{
         const newProfile = {...profile, ...newValues}
         setProfile(newProfile)
-    }
-    const onLogOut = () =>{
+    },[setProfile])
+
+    const onLogOut = useCallback(() =>{
         accountServices.logout();
         navigate('/login', {replace:true});
-    }
+    }, [navigate])
 
     useEffect(() => {
         profileServices.getCurrent()
         .then((profile) => {
         setProfile(profile)
-        console.log("hola",profile)
         })
         .catch(({error}) => {
             if(error)
             openSnackbar(error.message, 'error')
         })
-    }, []) 
+    }, [])
+
+    const value = useMemo(()=>{
+        return{
+            profile,
+            onLogOut,
+            updateProfileContext
+        }
+    }, [profile, onLogOut, updateProfileContext])
 
     return (
-        <SessionContext.Provider value={{profile, onLogOut, updateProfileContext}}>
+        <SessionContext.Provider value={value}>
           {children}
         </SessionContext.Provider>
       )
